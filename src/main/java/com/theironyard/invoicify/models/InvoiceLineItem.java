@@ -1,12 +1,14 @@
 package com.theironyard.invoicify.models;
 
 import java.sql.Date;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 @Entity
@@ -23,6 +25,9 @@ public class InvoiceLineItem {
 	
 	@ManyToOne
 	private User createdBy;
+	
+	@ManyToOne
+	private Invoice invoice;
 
 	public Long getId() {
 		return id;
@@ -55,4 +60,13 @@ public class InvoiceLineItem {
 	public void setCreatedBy(User createdBy) {
 		this.createdBy = createdBy;
 	}
+
+	public Invoice getInvoice() {
+		return invoice;
+	}
+
+	public void setInvoice(Invoice invoice) {
+		this.invoice = invoice;
+	}
+
 }
