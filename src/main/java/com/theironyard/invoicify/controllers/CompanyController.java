@@ -1,5 +1,7 @@
 package com.theironyard.invoicify.controllers;
 
+import java.util.List;
+
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -8,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.theironyard.invoicify.models.BillingRecord;
 import com.theironyard.invoicify.models.Company;
 import com.theironyard.invoicify.models.User;
 import com.theironyard.invoicify.repositories.CompanyRepository;
@@ -32,14 +35,14 @@ public class CompanyController {
 		ModelAndView mv = new ModelAndView("companies/list");
 		mv.addObject("user", user);
 		mv.addObject("companies", companyRepo.findAll(new Sort(Sort.Direction.ASC, "name")));
-//		mv.addObject("numberOfInvoices", companyRepo.count(invoices);
 		return mv;
 	}
 	
-	@PostMapping("create")
+	@PostMapping("create") 
 	public ModelAndView create(Company company) {
 		companyRepo.save(company);
 		return new ModelAndView ("redirect:/companies");
 	}
  
 }
+ 

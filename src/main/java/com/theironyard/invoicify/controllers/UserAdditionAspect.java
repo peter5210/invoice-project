@@ -1,4 +1,4 @@
-package com.theironyard.invoicify.models;
+package com.theironyard.invoicify.controllers;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -16,8 +16,12 @@ public class UserAdditionAspect {
 			model.addAttribute("notUser", true);
 		} else {
 			boolean isAdmin = request.isUserInRole("ADMIN");
+			boolean isClerk = request.isUserInRole("CLERK");
+			boolean isAccountant = request.isUserInRole("ACCOUNTANT");
 			model.addAttribute("user", auth.getPrincipal());
 			model.addAttribute("isAdmin", isAdmin);
+			model.addAttribute("isClerk", isClerk);
+			model.addAttribute("isAccountant", isAccountant);
 		}
 	}
 
