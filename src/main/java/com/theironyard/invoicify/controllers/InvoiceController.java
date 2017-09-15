@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,12 +24,13 @@ import com.theironyard.invoicify.repositories.InvoiceRepository;
 @Controller
 @RequestMapping("/invoices")
 public class InvoiceController {
-	
+
 	private CompanyRepository companyRepo;
 	private BillingRecordRepository billingRepo;
 	private InvoiceRepository invoiceRepo;
-	
-	public InvoiceController(CompanyRepository companyRepo, BillingRecordRepository billingRepo, InvoiceRepository invoiceRepo) {
+
+	public InvoiceController(CompanyRepository companyRepo, BillingRecordRepository billingRepo,
+			InvoiceRepository invoiceRepo) {
 		this.companyRepo = companyRepo;
 		this.billingRepo = billingRepo;
 		this.invoiceRepo = invoiceRepo;
@@ -40,16 +42,16 @@ public class InvoiceController {
 		ModelAndView mv = new ModelAndView("invoices/list");
 		mv.addObject("user", user);
 		mv.addObject("invoice", invoiceRepo.findAll());
-		return mv; 
+		return mv;
 	}
-	
+
 	@GetMapping("new")
 	public ModelAndView startNew() {
 		ModelAndView mv = new ModelAndView("invoices/step1");
 		mv.addObject("companies", companyRepo.findAll());
 		return mv;
 	}
-	
+
 	@PostMapping("new")
 	public ModelAndView start(long clientId) {
 		ModelAndView mv = new ModelAndView("invoices/step2");
@@ -57,14 +59,16 @@ public class InvoiceController {
 		mv.addObject("records", billingRepo.findByClientIdAndLineItemIsNull(clientId));
 		return mv;
 	}
-	
+
 	@PostMapping("create")
-	public String createInvoice(Invoice invoice, long clientId, long[] recordIds, Authentication auth) {
+	public ModelAndView createInvoice(Invoice invoice, long clientId, long[] recordIds, Authentication auth) {
 		User creator = (User) auth.getPrincipal();
+		ModelAndView mv = new ModelAndView();
+		try {
 		List<BillingRecord> records = billingRepo.findByIdIn(recordIds);
 		long time = Calendar.getInstance().getTimeInMillis();
 		Date now = new Date(time);
-		
+
 		List<InvoiceLineItem> items = new ArrayList<InvoiceLineItem>();
 		for (BillingRecord record : records) {
 			InvoiceLineItem lineItem = new InvoiceLineItem();
@@ -78,25 +82,16 @@ public class InvoiceController {
 		invoice.setCreatedBy(creator);
 		invoice.setCompany(companyRepo.findOne(clientId));
 		invoice.setLineItems(items);
-		invoiceRepo.save(invoice);
 		
-		return "redirect:/invoices";
+		
+			invoiceRepo.save(invoice);
+			mv.setViewName("redirect:/invoices");
+		} catch (InvalidDataAccessApiUsageException idaaue) { 
+			mv.setViewName("invoices/step2");
+			mv.addObject("clientId", clientId);
+			mv.addObject("records", billingRepo.findByClientIdAndLineItemIsNull(clientId));
+			mv.addObject("errorMessage", "Please select at least one billing record.");
+		} 
+		return mv;
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
