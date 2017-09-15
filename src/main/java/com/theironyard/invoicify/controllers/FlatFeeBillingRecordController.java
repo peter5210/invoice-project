@@ -16,14 +16,15 @@ import com.theironyard.invoicify.repositories.CompanyRepository;
 @RequestMapping("/billing-records/flat-fees")
 public class FlatFeeBillingRecordController {
 
-	private BillingRecordRepository billingRecordRepository;	
+	private BillingRecordRepository billingRecordRepository;
 	private CompanyRepository companyRepo;
-	
-	public FlatFeeBillingRecordController(BillingRecordRepository billingRecordRepository, CompanyRepository companyRepo) {
+
+	public FlatFeeBillingRecordController(BillingRecordRepository billingRecordRepository,
+			CompanyRepository companyRepo) {
 		this.billingRecordRepository = billingRecordRepository;
 		this.companyRepo = companyRepo;
 	}
-	
+
 	@PostMapping("")
 	public ModelAndView create(FlatFeeBillingRecord record, long clientId, Authentication auth) {
 		User user = (User) auth.getPrincipal();
@@ -31,8 +32,8 @@ public class FlatFeeBillingRecordController {
 		record.setClient(client);
 		record.setCreatedBy(user);
 		billingRecordRepository.save(record);
-		
+
 		return new ModelAndView("redirect:/billing-records");
 	}
-	
+
 }

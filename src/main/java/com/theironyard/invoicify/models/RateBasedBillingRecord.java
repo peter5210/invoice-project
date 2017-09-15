@@ -6,17 +6,18 @@ import javax.persistence.Entity;
 public class RateBasedBillingRecord extends BillingRecord {
 
 	private double rate;
-	
+
 	private double quantity;
-	
-	public RateBasedBillingRecord() {}
-	
+
+	public RateBasedBillingRecord() {
+	}
+
 	public RateBasedBillingRecord(double rate, double quantity, String description, User createdBy, Company client) {
 		super(description, createdBy, client);
 		this.rate = rate;
 		this.quantity = quantity;
 	}
-	
+
 	@Override
 	public double getTotal() {
 		return rate * quantity;

@@ -15,17 +15,17 @@ import javax.persistence.OneToOne;
 public class InvoiceLineItem {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
 	@OneToOne
 	private BillingRecord billingRecord;
-	
+
 	private Date createdOn;
-	
+
 	@ManyToOne
 	private User createdBy;
-	
+
 	@ManyToOne
 	private Invoice invoice;
 

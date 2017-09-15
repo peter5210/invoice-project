@@ -14,10 +14,10 @@ import com.theironyard.invoicify.repositories.UserRepository;
 @Controller
 @RequestMapping("/")
 public class HomeController {
-	
+
 	private UserRepository userRepository;
 	private PasswordEncoder encoder;
-	
+
 	public HomeController(UserRepository userRepository, PasswordEncoder encoder) {
 		this.userRepository = userRepository;
 		this.encoder = encoder;
@@ -27,19 +27,19 @@ public class HomeController {
 	public String home() {
 		return "home/default";
 	}
-	
+
 	@GetMapping("signup")
 	public String signup() {
 		return "home/signup";
 	}
-	
+
 	@PostMapping("signup")
 	public ModelAndView handleSignup(User user) {
 		// TODO THIS IS REALLY DUMB; NEEDS REFACTORING
 		String password = user.getPassword();
 		String encryptedPassword = encoder.encode(password);
 		user.setPassword(encryptedPassword);
-		
+
 		ModelAndView mv = new ModelAndView();
 		try {
 			userRepository.save(user);
@@ -50,21 +50,5 @@ public class HomeController {
 		}
 		return mv;
 	}
-	
+
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

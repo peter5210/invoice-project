@@ -11,7 +11,7 @@ import com.theironyard.invoicify.repositories.CompanyRepository;
 @Controller
 @RequestMapping("/billing-records")
 public class BillingRecordController {
-	
+
 	private BillingRecordRepository recordRepository;
 	private CompanyRepository companyRepo;
 
@@ -27,5 +27,5 @@ public class BillingRecordController {
 		mv.addObject("companies", companyRepo.findAll());
 		return mv;
 	}
-	
+
 }

@@ -14,34 +14,34 @@ import javax.persistence.OneToOne;
 public abstract class BillingRecord {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
 	@ManyToOne
 	private User createdBy;
-	
+
 	private Date createdOn;
-	
+
 	private String description;
-	
-	@OneToOne(mappedBy="billingRecord")
+
+	@OneToOne(mappedBy = "billingRecord")
 	private InvoiceLineItem lineItem;
-	
+
 	@ManyToOne
 	private Company client;
-	
+
 	public BillingRecord() {
 		long now = Calendar.getInstance().getTimeInMillis();
 		createdOn = new Date(now);
 	}
-	
+
 	public BillingRecord(String description, User createdBy, Company client) {
 		this();
 		this.createdBy = createdBy;
 		this.description = description;
 		this.client = client;
 	}
-	
+
 	public abstract double getTotal();
 
 	public Long getId() {
@@ -91,5 +91,5 @@ public abstract class BillingRecord {
 	public void setClient(Company client) {
 		this.client = client;
 	}
-	
+
 }

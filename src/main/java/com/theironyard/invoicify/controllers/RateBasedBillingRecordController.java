@@ -15,15 +15,15 @@ import com.theironyard.invoicify.repositories.CompanyRepository;
 @Controller
 @RequestMapping("/billing-records/rate-records")
 public class RateBasedBillingRecordController {
-	
+
 	private BillingRecordRepository billingRecordRepo;
 	private CompanyRepository companyRepo;
-	
+
 	public RateBasedBillingRecordController(BillingRecordRepository billingRecordRepo, CompanyRepository companyRepo) {
 		this.billingRecordRepo = billingRecordRepo;
 		this.companyRepo = companyRepo;
 	}
-	
+
 	@PostMapping("")
 	public ModelAndView create(RateBasedBillingRecord record, Authentication auth, long clientId) {
 		User user = (User) auth.getPrincipal();
@@ -31,7 +31,7 @@ public class RateBasedBillingRecordController {
 		record.setClient(client);
 		record.setCreatedBy(user);
 		billingRecordRepo.save(record);
-				
+
 		return new ModelAndView("redirect:/billing-records");
 	}
 

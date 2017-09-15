@@ -19,16 +19,15 @@ import com.theironyard.invoicify.repositories.InvoiceRepository;
 @Controller
 @RequestMapping("/companies")
 public class CompanyController {
-	
+
 	private CompanyRepository companyRepo;
 	private InvoiceRepository invoiceRepo;
-	
+
 	public CompanyController(CompanyRepository companyRepo, InvoiceRepository invoiceRepo) {
 		this.companyRepo = companyRepo;
 		this.invoiceRepo = invoiceRepo;
 	}
-	
-	
+
 	@GetMapping("")
 	public ModelAndView listCompanies(Authentication auth) {
 		User user = (User) auth.getPrincipal();
@@ -37,12 +36,11 @@ public class CompanyController {
 		mv.addObject("companies", companyRepo.findAll(new Sort(Sort.Direction.ASC, "name")));
 		return mv;
 	}
-	
-	@PostMapping("create") 
+
+	@PostMapping("create")
 	public ModelAndView create(Company company) {
 		companyRepo.save(company);
-		return new ModelAndView ("redirect:/companies");
+		return new ModelAndView("redirect:/companies");
 	}
- 
+
 }
- 

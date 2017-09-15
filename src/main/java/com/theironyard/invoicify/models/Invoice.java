@@ -15,20 +15,20 @@ import javax.persistence.OneToMany;
 public class Invoice {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	
+
 	@ManyToOne
 	private Company company;
-	
+
 	private Date createdOn;
-	
+
 	@ManyToOne
 	private User createdBy;
-	
+
 	private String invoiceNumber;
-	
-	@OneToMany(mappedBy="invoice", cascade=CascadeType.ALL)
+
+	@OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL)
 	private List<InvoiceLineItem> lineItems;
 
 	public Long getId() {
@@ -78,5 +78,5 @@ public class Invoice {
 	public void setLineItems(List<InvoiceLineItem> lineItems) {
 		this.lineItems = lineItems;
 	}
-	
+
 }

@@ -65,33 +65,32 @@ public class InvoiceController {
 		User creator = (User) auth.getPrincipal();
 		ModelAndView mv = new ModelAndView();
 		try {
-		List<BillingRecord> records = billingRepo.findByIdIn(recordIds);
-		long time = Calendar.getInstance().getTimeInMillis();
-		Date now = new Date(time);
+			List<BillingRecord> records = billingRepo.findByIdIn(recordIds);
+			long time = Calendar.getInstance().getTimeInMillis();
+			Date now = new Date(time);
 
-		List<InvoiceLineItem> items = new ArrayList<InvoiceLineItem>();
-		for (BillingRecord record : records) {
-			InvoiceLineItem lineItem = new InvoiceLineItem();
-			lineItem.setBillingRecord(record);
-			lineItem.setCreatedBy(creator);
-			lineItem.setCreatedOn(now);
-			lineItem.setInvoice(invoice);
-			items.add(lineItem);
-		}
-		invoice.setCreatedOn(now);
-		invoice.setCreatedBy(creator);
-		invoice.setCompany(companyRepo.findOne(clientId));
-		invoice.setLineItems(items);
-		
-		
+			List<InvoiceLineItem> items = new ArrayList<InvoiceLineItem>();
+			for (BillingRecord record : records) {
+				InvoiceLineItem lineItem = new InvoiceLineItem();
+				lineItem.setBillingRecord(record);
+				lineItem.setCreatedBy(creator);
+				lineItem.setCreatedOn(now);
+				lineItem.setInvoice(invoice);
+				items.add(lineItem);
+			}
+			invoice.setCreatedOn(now);
+			invoice.setCreatedBy(creator);
+			invoice.setCompany(companyRepo.findOne(clientId));
+			invoice.setLineItems(items);
+
 			invoiceRepo.save(invoice);
 			mv.setViewName("redirect:/invoices");
-		} catch (InvalidDataAccessApiUsageException idaaue) { 
+		} catch (InvalidDataAccessApiUsageException idaaue) {
 			mv.setViewName("invoices/step2");
 			mv.addObject("clientId", clientId);
 			mv.addObject("records", billingRepo.findByClientIdAndLineItemIsNull(clientId));
 			mv.addObject("errorMessage", "Please select at least one billing record.");
-		} 
+		}
 		return mv;
 	}
 }
